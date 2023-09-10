@@ -7,8 +7,8 @@ function fetchMessages() {
     console.log("a2")
 
     const chats = Array.from(chatElements)
-    .filter(element => element.getAttribute('data-pre-plain-text')) // Filter out elements with no 'data-pre-plain-text' attribute
-    .map(element => {
+        .filter(element => element.getAttribute('data-pre-plain-text')) // Filter out elements with no 'data-pre-plain-text' attribute
+        .map(element => {
             console.log("a2")
             const info = element.getAttribute('data-pre-plain-text');
             const usernameStartIndex = info.indexOf('] ') + 2;

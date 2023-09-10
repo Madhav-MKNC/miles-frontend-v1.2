@@ -1,3 +1,4 @@
+/* ... */
 document.addEventListener('DOMContentLoaded', function () {
   let dictString = localStorage.getItem('miles2');
   console.log(dictString)
@@ -5,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (dictString == null) {
     const data = {
       "conversation_data": {
-        "test": ["chhatri leni hai", "chats", [0, 20, 40, 50,60,70,80], ""],
+        "test": ["chhatri leni hai", "chats", [0, 20, 40, 50, 60, 70, 80], ""],
       },
       "toggleState": false,
       "user_name": ''
@@ -14,14 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
     dictString = localStorage.getItem('miles2');
     console.log("New miles2 created")
   }
-
   const dict = JSON.parse(dictString)
 
   if (dict.toggleState) {
     document.getElementById('toggleInput').checked = true;
     document.body.classList.add('show-content');
   }
-
 
   document.getElementById('toggleInput').addEventListener('change', function () {
     console.log("toggled")
@@ -35,14 +34,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   document.getElementById('openApp').addEventListener('click', function () {
-
     const url = chrome.runtime.getURL('build/index.html');
     window.open(url, '_blank');
-
   });
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // h3
+
+  /* h3 */
   var name = ''
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tabs[0].id, { geth3: true }, function (response) {
@@ -61,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  /* ... */
   document.getElementById('setgoal').addEventListener('click', function () {
     var goalInput = document.getElementById('myInput').value;
     console.log('e1')
@@ -106,27 +103,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////FENERATE REPLY///////////////////////////
 
+  /* GENERATE REPLY */
   document.getElementById('backup').addEventListener('click', () => {
     console.log("generate request sent")
     let goal = ''
-    if (dict.conversation_data[name])
-      { goal = dict.conversation_data[name][0] }
+    if (dict.conversation_data[name]) { goal = dict.conversation_data[name][0] }
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { backup: true, goal: goal }, function(response){
-        if(dict.conversation_data[name][1] == ''){
+      chrome.tabs.sendMessage(tabs[0].id, { backup: true, goal: goal }, function (response) {
+        if (dict.conversation_data[name][1] == '') {
           dict.conversation_data[name][1] = response.chats
           const updatedData = JSON.stringify(dict);
           localStorage.setItem("miles2", updatedData);
           console.log("if")
         }
-        else{
-          if(dict.conversation_data[name][3] === response.chats){
+        else {
+          if (dict.conversation_data[name][3] === response.chats) {
 
           }
-          else{
+          else {
             dict.conversation_data[name][1] = dict.conversation_data[name][3]
             dict.conversation_data[name][3] = response.chats
             const updatedData = JSON.stringify(dict);
@@ -136,23 +131,21 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     });
-
-
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////
 
-  chrome.runtime.onMessage.addListener(function(message) {
-    if(message.clickfrombg){
+  /* ... */
+  chrome.runtime.onMessage.addListener(function (message) {
+    if (message.clickfrombg) {
       console.log("c1");
       let storedDataString = localStorage.getItem("miles2");
       let storedData = JSON.parse(storedDataString);
-  
+
       // Assuming otherUserLabel and chats are part of the message
       let otherUserLabel = message.otherUserLabel;
       console.log("c2");
       let chats = message.chats;
-  
+
       if (storedData.conversation_data[otherUserLabel]) {
         console.log("c3");
         storedData.conversation_data[otherUserLabel][3] = chats;
@@ -162,143 +155,5 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log("c4");
     }
   });
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-
-  // document.addEventListener('DOMContentLoaded', function () {
-  //   chrome.storage.local.get(["miles2"]).then((result) => {
-  //     let dict = result.miles2 || {
-  //       "conversation_data": {
-  //         "test": ["chhatri leni hai", "chats", [0, 20, 40, 50], ""],
-  //       },
-  //       "toggleState": false,
-  //       "user_name": ''
-  //     };
-  
-  //     if (!result.miles2) {
-  //       chrome.storage.local.set({"miles2": dict});
-  //       console.log("New miles2 created");
-  //     }
-      
-  //     if (dict.toggleState) {
-  //       console.log("yo")
-  //       document.getElementById('toggleInput').checked = true;
-  //       document.body.classList.add('show-content');
-  //     }
-  
-  //     document.getElementById('toggleInput').addEventListener('change', function () {
-  //       console.log("toggled");
-  //       document.body.classList.toggle('show-content');
-  //       dict.toggleState = this.checked;
-  //       chrome.storage.local.set({'miles2' : dict});
-  //       console.log(dict);
-  //     });
-  
-  //   });
-  
-  
-  //   document.getElementById('openApp').addEventListener('click', function () {
-  //     const url = chrome.runtime.getURL('build/index.html');
-  //     window.open(url, '_blank');
-  
-  //   });
-  
-  // ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //   // h3
-  //   var name = ''
-  //   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  //     chrome.tabs.sendMessage(tabs[0].id, { geth3: true }, function (response) {
-  //       document.querySelector('h3').innerText = response.otherUserName;
-  //       name = response.otherUserName;
-  //       // name = otherUser;
-  //       console.log("name= ")
-  //       console.log(name)
-  //       chrome.storage.local.get(["miles2"]).then((result) => {
-  //         let dict = result.miles2;
-  //         if (name !== "" && dict.conversation_data[name]) {
-  //           const placeholderValue = dict.conversation_data[name][0];
-  //           document.getElementById('myInput').placeholder = placeholderValue;
-  //         }
-  //         else {
-  //           document.getElementById('myInput').placeholder = '';
-  //         }
-  //       });
-        
-  //     });
-  //   });
-  
-  //   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  //   document.getElementById('setgoal').addEventListener('click', function () {
-  //     chrome.storage.local.get(["miles2"]).then((result) => {
-  //       let dict = result.miles2;
-  //       var goalInput = document.getElementById('myInput').value;
-  //     console.log('e1')
-  //     if (goalInput !== '') { //only if the goal is legit
-  //       if (dict && dict.conversation_data && dict.conversation_data[name]) { //if there is an entry already
-  //         console.log("milgaya")
-  //         dict.conversation_data[name][0] = goalInput; // Replace the 0th element
-  //         dict.conversation_data[name][2] = []; //reset the y values
-  //         document.getElementById('myInput').value = '';
-  //         document.getElementById('myInput').placeholder = goalInput;
-  //       }
-  //       // localStorage.setItem('miles2', JSON.stringify(dict));
-  //       chrome.storage.local.set({'miles2': dict});
-        
-  //       if (dict && dict.conversation_data && (dict.conversation_data[name] == null)) {
-  //         console.log("nahi mila mkc")
-  //         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  //           chrome.tabs.sendMessage(tabs[0].id, { getScraped: true }, function (response) {
-  
-  //             console.log(response)
-  //             const thisUser = response.thisUser;
-  //             const otherUserLabel = response.otherUserLabel;
-  //             const isGroup = response.isGroup;
-  //             const chats = response.chats;
-  //             dict.conversation_data[name] = [goalInput, chats, [], '']; // Replace the 0th element
-  //             dict.user_name = thisUser;
-  //             const updatedData = dict;
-  //             console.log("###########")
-  //             console.log(thisUser)
-  //             console.log(otherUserLabel)
-  //             console.log(isGroup)
-  //             console.log(chats)
-  //             console.log("###########")
-  //             document.getElementById('myInput').value = '';
-  //             document.getElementById('myInput').placeholder = goalInput;
-  //             chrome.storage.local.set({"miles2" : updatedData});
-  //           });
-  //         });
-  //       }
-  //     }
-  //     });
-  //   });
-  
-  //   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  //   document.getElementById('backup').addEventListener('click', () => {
-  //     chrome.storage.local.get(["miles2"]).then((result) => {
-  //       let dict = result.miles2;
-  //       console.log("generate request sent");
-  //       let goal = ''
-  //       if (dict.conversation_data[name]) { goal = dict.conversation_data[name][0] }
-  //       console.log("goal")
-  //       console.log(goal)
-  //       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  //       chrome.tabs.sendMessage(tabs[0].id, { backup: true, goal: goal });
-  //     });
-  //     });
-  //   });
-  // });
-  
-  
-
-
 });
 
