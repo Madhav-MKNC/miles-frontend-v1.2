@@ -23,7 +23,9 @@
                 "https://web.whatsapp.com/*"
             ],
             "js": [
-                "content.js", "click.js", "reply.js"
+                "content.js",
+                "click.js",
+                "reply.js"
             ]
         }
     ]

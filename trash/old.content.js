@@ -1,30 +1,17 @@
-// this file accomplishes the task of 'content.js' from version 0.2 (miles-frontend-v0.2)
-
-let localkey = "miles2";
-
-/* Save the "self" user name */
-function saveUserName(self_user) {
-    const existingData = JSON.parse(localStorage.getItem(localkey)) || {
-        conversation_data: {
-            "test": ["chhatri leni hai", "chats", [0, 20, 40, 50, 60, 70, 80], ""],
-        },
-        toggleState: "",
-        user_name: "",
-    };
-
-    existingData.user_name = self_user;
-    localStorage.setItem(localkey, JSON.stringify(existingData));
-    console.log("saving the username:", self_user)
-}
-
-
-/* Get the "self" user name */
-function getUserName() {
-    const data = localStorage.getItem(localkey);
+// Function to get data from local cache
+function getConversationData(user, arg) {
+    const data = localStorage.getItem("miles");
     if (data) {
         try {
             const parsedData = JSON.parse(data);
-            return parsedData.user_name;
+            const conversationData = parsedData.conversation_data[user];
+            if (conversationData && conversationData.length > 0) {
+                if (arg === "goal") {
+                    return conversationData[0].trim();
+                } else if (arg === "preamble") {
+                    return conversationData[1].trim();
+                }
+            }
         } catch (error) {
             console.error("Error parsing data from localStorage:", error);
             return "";
@@ -33,9 +20,35 @@ function getUserName() {
     return "";
 }
 
+// Save the "self" user name
+function saveUserName(self_user) {
+    const existingData = JSON.parse(localStorage.getItem("miles")) || {
+        conversation_data: {},
+        toggle_state: "",
+        self_user: "",
+    };
 
-// get context from conversation
-function fetchMessages(sentgoal) {
+    existingData.self_user = self_user;
+    localStorage.setItem("miles", JSON.stringify(existingData));
+}
+
+// Get the "self" user name
+function getUserName() {
+    const data = localStorage.getItem("miles");
+    if (data) {
+        try {
+            const parsedData = JSON.parse(data);
+            return parsedData.self_user;
+        } catch (error) {
+            console.error("Error parsing data from localStorage:", error);
+            return "";
+        }
+    }
+    return "";
+}
+
+// fetch chats, thisUser, otherUser and isGroup
+function fetchData() {
     const chatElements = document.querySelectorAll(".copyable-text");
     const otherUser = document.querySelector("._3W2ap")
         ? document.querySelector("._3W2ap").innerText
@@ -74,7 +87,8 @@ function fetchMessages(sentgoal) {
     const isGroup = usernames.size > 2;
 
     // Sending goal for this conversation (if any)
-    const goal = sentgoal;
+    const goal = getConversationData(otherUser, "goal");
+    const preamble = getConversationData(otherUser, "preamble");
     console.log("generating reply...");
 
     /*
@@ -83,16 +97,16 @@ function fetchMessages(sentgoal) {
       otherUser: string,
       isGroup: boolean,
       goal: string,
+      preamble: string,
       chats: array
     }
     */
-    return { thisUser, otherUser, isGroup, goal, chats };
+    return { thisUser, otherUser, isGroup, goal, preamble, chats };
 }
 
-
-// fetch reply from server
+// send data to backend
 async function sendToServer(data) {
-    const response = await fetch("https://miles.gamhcrew.repl.co/get_reply", {
+    const response = await fetch("http://localhost/get_reply", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -103,17 +117,16 @@ async function sendToServer(data) {
     return result.reply;
 }
 
-
-// display the generated reply
+// display generated reply
 function placeSuggestedReply(reply) {
     const inputBar = document.querySelector("footer");
     const replyElement = document.createElement("div");
-    replyElement.style.backgroundColor = "#1E1E26";
-    replyElement.style.opacity = "100%";
+    replyElement.style.backgroundColor = "#101026";
+    replyElement.style.opacity = "90%";
     replyElement.style.borderRadius = "5px";
     replyElement.style.padding = "8px";
     replyElement.style.width = "60%";
-    replyElement.style.height = "auto";
+    replyElement.style.height = "20px";
     replyElement.style.margin = "20px";
     replyElement.style.cursor = "pointer";
     replyElement.style.border = "1px solid rgba(255, 255, 255, 0.8)";
@@ -133,17 +146,9 @@ function placeSuggestedReply(reply) {
     });
 }
 
-
 // main
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.backup) {
-        (async () => {
-            console.log("reply.js started execution")
-            const data = fetchMessages(message.goal);
-            sendResponse(data);
-            const reply = await sendToServer(data);
-            console.log(reply)
-            placeSuggestedReply(reply);
-        })();
-    }
-});
+(async () => {
+    const messages = fetchData();
+    const reply = await sendToServer(messages);
+    placeSuggestedReply(reply);
+})();
