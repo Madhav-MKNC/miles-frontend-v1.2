@@ -73,9 +73,12 @@ function fetchMessages(sentgoal) {
     // Sending goal for this conversation (if any)
     const goal = sentgoal;
 
-    // self WA number
+    // WA number
     const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').match(/"(\d+):/)[1] : "";
-    // console.log("[",userID,"]");
+    const otherUserID = document.querySelector('[data-id]').getAttribute('data-id').match(/_(\d+)@/)[1];
+
+
+    
 
     /*
     {
@@ -84,17 +87,27 @@ function fetchMessages(sentgoal) {
       isGroup: boolean,
       goal: string,
       chats: array,
-      userID: string
+      userID: string,
+      otherUserID: string
     }
     */
-    return { thisUser, otherUser, isGroup, goal, chats, userID };
+
+    return {
+        thisUser: thisUser,
+        otherUser: otherUser,
+        isGroup: isGroup,
+        goal: goal,
+        chats: chats,
+        userID: userID,
+        otherUserID: otherUserID
+    }
 }
 
 
 // fetch reply from server
 async function get_repy_from_server(data) {
     console.log("generating reply...");
-    
+
     const response = await fetch("https://miles.gamhcrew.repl.co/get_reply", {
         method: "POST",
         headers: {
