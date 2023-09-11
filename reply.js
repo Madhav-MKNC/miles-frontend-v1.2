@@ -141,11 +141,10 @@ function placeSuggestedReply(reply) {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.backup) {
         (async () => {
-            console.log("reply.js started execution")
             const data = fetchMessages(message.goal);
             sendResponse(data);
             const reply = await get_repy_from_server(data);
-            console.log(reply)
+            console.log('generated successfully');
             placeSuggestedReply(reply);
         })();
     }

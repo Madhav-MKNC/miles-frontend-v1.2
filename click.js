@@ -57,15 +57,13 @@ function getUserName() {
 
 // refresh things
 async function refreshClick(data) {
-    const response = await fetch("https://miles.gamhcrew.repl.co/refresh", {
+    await fetch("https://miles.gamhcrew.repl.co/refresh", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
     });
-    const result = await response.json();
-    return result.status;
 }
 
 
@@ -132,7 +130,7 @@ document.addEventListener('click', function () {
         */
 
         // Send a message to the background.js
-        const status = refreshClick({
+        refreshClick({
             thisUser: thisUser,
             otherUser: otherUser,
             isGroup: isGroup,
@@ -140,7 +138,7 @@ document.addEventListener('click', function () {
             chats: chats,
             userID: userID
         })
-        console.log("refresh status:", status);
+        console.log("refresh done");
 
     }, 1000); // 1000ms delay, you can adjust this value as needed
 });
