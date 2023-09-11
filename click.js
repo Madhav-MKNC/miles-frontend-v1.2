@@ -1,4 +1,28 @@
+// refresh the whole thing
+
 let localkey = "miles2";
+
+function getConversationData(user, arg) {
+    const data = localStorage.getItem("miles");
+    if (data) {
+        try {
+            const parsedData = JSON.parse(data);
+            const conversationData = parsedData.conversation_data[user];
+            if (conversationData && conversationData.length > 0) {
+                if (arg === "goal") {
+                    return conversationData[0].trim();
+                } else if (arg === "preamble") {
+                    return conversationData[1].trim();
+                }
+            }
+        } catch (error) {
+            console.error("Error parsing data from localStorage:", error);
+            return "";
+        }
+    }
+    return "";
+}
+
 
 /* Save the "self" user name */
 function saveUserName(self_user) {
@@ -75,13 +99,16 @@ document.addEventListener('click', function () {
         // If there are more than two users, including "thisUser", then it's a group chat
         const isGroup = usernames.size > 2;
 
+        // Sending goal for this conversation (if any)
+        const goal = getConversationData(otherUser, "goal");
+
         /*
         {
+            clicked: boolean,
             thisUser: string,
             otherUser: string,
             isGroup: boolean,
             goal: string,
-            preamble: string,
             chats: array
         }
         */
@@ -92,9 +119,10 @@ document.addEventListener('click', function () {
             thisUser: thisUser,
             otherUser: otherUser,
             isGroup: isGroup,
+            goal: goal,
             chats: chats
         }, function (response) {
-            console.log("Message sent");
+            console.log("refreshed");
             console.log(chats);
         });
     }, 1000); // 1000ms delay, you can adjust this value as needed

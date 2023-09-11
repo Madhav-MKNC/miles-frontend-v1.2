@@ -2,6 +2,7 @@
 
 let localkey = "miles2";
 
+
 /* Save the "self" user name */
 function saveUserName(self_user) {
     const existingData = JSON.parse(localStorage.getItem(localkey)) || {
