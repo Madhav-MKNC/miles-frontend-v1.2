@@ -1,6 +1,3 @@
-let localkey = "miles2";
-
-
 // update
 async function refreshClick(data) {
   const response = await fetch("https://miles.gamhcrew.repl.co/refresh", {
@@ -11,20 +8,21 @@ async function refreshClick(data) {
       body: JSON.stringify(data),
   });
   const result = await response.json();
-  return result.reply;
+  return result.status;
 }
 
 
 // main
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("click krna tha abhi")
 
   // click.js
   if (message.clicked) {
     console.log("click ho gya bhai");
 
     // Retrieve stored data
-    chrome.storage.local.get(localkey, function (result) {
-      let storedData = result[localkey];
+    chrome.storage.local.get("miles2", function (result) {
+      let storedData = result["miles2"];
 
       // Assuming otherUserLabel and chats are part of the message
       let otherUserLabel = message.otherUser;
@@ -39,7 +37,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.log(status);
 
       // Set the updated data
-      chrome.storage.local.set({ localkey: JSON.stringify(storedData) }, function () {
+      chrome.storage.local.set({ "miles2": JSON.stringify(storedData) }, function () {
       });
     });
   }

@@ -1,6 +1,5 @@
 // this file accomplishes the task of 'content.js' from version 0.2 (miles-frontend-v0.2)
 
-
 /* Save the "self" user name */
 function saveUserName(self_user) {
     const existingData = JSON.parse(localStorage.getItem("miles2")) || {
@@ -13,7 +12,6 @@ function saveUserName(self_user) {
 
     existingData.user_name = self_user;
     localStorage.setItem("miles2", JSON.stringify(existingData));
-    console.log("saving the username:", self_user)
 }
 
 
@@ -74,10 +72,9 @@ function fetchMessages(sentgoal) {
 
     // Sending goal for this conversation (if any)
     const goal = sentgoal;
-    console.log("generating reply...");
 
     // self WA number
-    const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').trim().replace(/[^0-9]/g, '') : "";
+    const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').match(/"(\d+):/)[1] : "";
     // console.log("[",userID,"]");
 
     /*
@@ -95,7 +92,9 @@ function fetchMessages(sentgoal) {
 
 
 // fetch reply from server
-async function sendToServer(data) {
+async function get_repy_from_server(data) {
+    console.log("generating reply...");
+    
     const response = await fetch("https://miles.gamhcrew.repl.co/get_reply", {
         method: "POST",
         headers: {
@@ -145,7 +144,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             console.log("reply.js started execution")
             const data = fetchMessages(message.goal);
             sendResponse(data);
-            const reply = await sendToServer(data);
+            const reply = await get_repy_from_server(data);
             console.log(reply)
             placeSuggestedReply(reply);
         })();
