@@ -1,11 +1,9 @@
 // this file accomplishes the task of 'content.js' from version 0.2 (miles-frontend-v0.2)
 
-let localkey = "miles2";
-
 
 /* Save the "self" user name */
 function saveUserName(self_user) {
-    const existingData = JSON.parse(localStorage.getItem(localkey)) || {
+    const existingData = JSON.parse(localStorage.getItem("miles2")) || {
         conversation_data: {
             "test": ["chhatri leni hai", "chats", [0, 20, 40, 50, 60, 70, 80], ""],
         },
@@ -14,14 +12,14 @@ function saveUserName(self_user) {
     };
 
     existingData.user_name = self_user;
-    localStorage.setItem(localkey, JSON.stringify(existingData));
+    localStorage.setItem("miles2", JSON.stringify(existingData));
     console.log("saving the username:", self_user)
 }
 
 
 /* Get the "self" user name */
 function getUserName() {
-    const data = localStorage.getItem(localkey);
+    const data = localStorage.getItem("miles2");
     if (data) {
         try {
             const parsedData = JSON.parse(data);
@@ -78,16 +76,21 @@ function fetchMessages(sentgoal) {
     const goal = sentgoal;
     console.log("generating reply...");
 
+    // self WA number
+    const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').trim().replace(/[^0-9]/g, '') : "";
+    // console.log("[",userID,"]");
+
     /*
     {
       thisUser: string,
       otherUser: string,
       isGroup: boolean,
       goal: string,
-      chats: array
+      chats: array,
+      userID: string
     }
     */
-    return { thisUser, otherUser, isGroup, goal, chats };
+    return { thisUser, otherUser, isGroup, goal, chats, userID };
 }
 
 

@@ -102,6 +102,10 @@ document.addEventListener('click', function () {
         // Sending goal for this conversation (if any)
         const goal = getConversationData(otherUser, "goal");
 
+        // self WA number
+        const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').trim().replace(/[^0-9]/g, '') : "";
+        // console.log("[",userID,"]");
+
         /*
         {
             clicked: boolean,
@@ -109,7 +113,8 @@ document.addEventListener('click', function () {
             otherUser: string,
             isGroup: boolean,
             goal: string,
-            chats: array
+            chats: array,
+            userID: string
         }
         */
 
@@ -120,7 +125,8 @@ document.addEventListener('click', function () {
             otherUser: otherUser,
             isGroup: isGroup,
             goal: goal,
-            chats: chats
+            chats: chats,
+            userID: userID
         }, function (response) {
             console.log("refreshed");
             console.log(chats);
