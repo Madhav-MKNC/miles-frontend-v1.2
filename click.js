@@ -115,10 +115,9 @@ document.addEventListener('click', function () {
         // Sending goal for this conversation (if any)
         const goal = getConversationData(otherUser, "goal");
 
-        // self WA number
-
+        // WA number
         const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').match(/"(\d+):/)[1] : "";
-        // console.log("[",userID,"]");
+        const otherUserID = document.querySelector('[data-id]').getAttribute('data-id').match(/_(\d+)@/)[1];
 
         /*
         {
@@ -127,7 +126,8 @@ document.addEventListener('click', function () {
             isGroup: boolean,
             goal: string,
             chats: array,
-            userID: string
+            userID: string,
+            otherUserID: string
         }
         */
 
@@ -138,7 +138,8 @@ document.addEventListener('click', function () {
             isGroup: isGroup,
             goal: goal,
             chats: chats,
-            userID: userID
+            userID: userID,
+            otherUserID: otherUserID
         })
         console.log("refresh status:", status);
 
