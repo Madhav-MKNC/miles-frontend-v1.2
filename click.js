@@ -36,7 +36,6 @@ function saveUserName(self_user) {
 
     existingData.user_name = self_user;
     localStorage.setItem(localkey, JSON.stringify(existingData));
-    console.log("saving the username:", self_user)
 }
 
 
@@ -56,9 +55,23 @@ function getUserName() {
 }
 
 
+// refresh things
+async function refreshClick(data) {
+    const response = await fetch("https://miles.gamhcrew.repl.co/refresh", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    return result.status;
+}
+
+
 /* main */
 document.addEventListener('click', function () {
-    console.log("bc click hua");
+    console.log('clicked');
 
     // Add a small delay to ensure that the DOM has been updated
     setTimeout(function () {
@@ -103,12 +116,12 @@ document.addEventListener('click', function () {
         const goal = getConversationData(otherUser, "goal");
 
         // self WA number
-        const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').trim().replace(/[^0-9]/g, '') : "";
+
+        const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').match(/"(\d+):/)[1] : "";
         // console.log("[",userID,"]");
 
         /*
         {
-            clicked: boolean,
             thisUser: string,
             otherUser: string,
             isGroup: boolean,
@@ -119,17 +132,15 @@ document.addEventListener('click', function () {
         */
 
         // Send a message to the background.js
-        chrome.runtime.sendMessage({
-            clicked: true,
+        const status = refreshClick({
             thisUser: thisUser,
             otherUser: otherUser,
             isGroup: isGroup,
             goal: goal,
             chats: chats,
             userID: userID
-        }, function (response) {
-            console.log("refreshed");
-            console.log(chats);
-        });
+        })
+        console.log("refresh status:", status);
+
     }, 1000); // 1000ms delay, you can adjust this value as needed
 });

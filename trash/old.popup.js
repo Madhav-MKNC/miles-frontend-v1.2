@@ -1,8 +1,6 @@
-let localkey = "miles2";
-
 /* ... */
 document.addEventListener('DOMContentLoaded', function () {
-  let dictString = localStorage.getItem(localkey);
+  let dictString = localStorage.getItem("miles2");
   console.log(dictString)
 
   if (dictString == null) {
@@ -13,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
       "toggleState": false,
       "user_name": ''
     }
-    localStorage.setItem(localkey, JSON.stringify(data))
-    dictString = localStorage.getItem(localkey);
+    localStorage.setItem("miles2", JSON.stringify(data))
+    dictString = localStorage.getItem("miles2");
     console.log("New key (miles2) created")
   }
   const dict = JSON.parse(dictString)
@@ -27,11 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('toggleInput').addEventListener('change', function () {
     console.log("toggled")
     document.body.classList.toggle('show-content');
-    var dictString = localStorage.getItem(localkey);
+    var dictString = localStorage.getItem("miles2");
     const dict = JSON.parse(dictString)
     // Save the current toggle state to localStorage
     dict.toggleState = this.checked; // Updating the original dict with the modified data
-    localStorage.setItem(localkey, JSON.stringify(dict));
+    localStorage.setItem("miles2", JSON.stringify(dict));
     console.log(dict)
   });
 
@@ -73,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('myInput').value = '';
         document.getElementById('myInput').placeholder = goalInput;
       }
-      localStorage.setItem(localkey, JSON.stringify(dict));
+      localStorage.setItem("miles2", JSON.stringify(dict));
 
       if (dict && dict.conversation_data && (dict.conversation_data[name] == null)) {
         console.log("nahi mila mkc")
@@ -98,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('myInput').placeholder = goalInput;
 
             // Store it back into localStorage
-            localStorage.setItem(localkey, updatedData);
+            localStorage.setItem("miles2", updatedData);
           });
         });
       }
@@ -116,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (dict.conversation_data[name][1] == '') {
           dict.conversation_data[name][1] = response.chats
           const updatedData = JSON.stringify(dict);
-          localStorage.setItem(localkey, updatedData);
+          localStorage.setItem("miles2", updatedData);
           console.log("if")
         }
         else {
@@ -127,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dict.conversation_data[name][1] = dict.conversation_data[name][3]
             dict.conversation_data[name][3] = response.chats
             const updatedData = JSON.stringify(dict);
-            localStorage.setItem(localkey, updatedData);
+            localStorage.setItem("miles2", updatedData);
             console.log("else")
           }
         }
@@ -140,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
   chrome.runtime.onMessage.addListener(function (message) {
     if (message.clickfrombg) {
       console.log("c1");
-      let storedDataString = localStorage.getItem(localkey);
+      let storedDataString = localStorage.getItem("miles2");
       let storedData = JSON.parse(storedDataString);
 
       // Assuming otherUserLabel and chats are part of the message
@@ -153,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
         storedData.conversation_data[otherUserLabel][3] = chats;
       }
       console.log("c4");
-      localStorage.setItem(localkey, JSON.stringify(storedData));
+      localStorage.setItem("miles2", JSON.stringify(storedData));
       console.log("c4");
     }
   });
