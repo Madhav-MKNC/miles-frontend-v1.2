@@ -77,9 +77,6 @@ function fetchMessages(sentgoal) {
     const userID = localStorage.getItem('last-wid-md') ? localStorage.getItem('last-wid-md').match(/"(\d+):/)[1] : "";
     const otherUserID = document.querySelector('[data-id]').getAttribute('data-id').match(/_(\d+)@/)[1];
 
-
-    
-
     /*
     {
       thisUser: string,
