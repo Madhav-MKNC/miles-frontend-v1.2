@@ -81,8 +81,6 @@ document.addEventListener('click', function () {
             : "";
         let thisUser = getUserName() ? getUserName() : "";
 
-        const usernames = new Set();
-
         const chats = Array.from(chatElements)
             .filter((element) => element.getAttribute("data-pre-plain-text")) // Filter out elements with no 'data-pre-plain-text' attribute
             .map((element) => {
@@ -92,7 +90,6 @@ document.addEventListener('click', function () {
                 const usernameStartIndex = info.indexOf("] ") + 2;
                 const usernameEndIndex = info.lastIndexOf(":");
                 const username = info.slice(usernameStartIndex, usernameEndIndex);
-                usernames.add(username); // Add username to a set
 
                 const messageElement = element.querySelector(".selectable-text");
                 const messageText = messageElement ? messageElement.innerText : "";
@@ -110,7 +107,24 @@ document.addEventListener('click', function () {
             });
 
         // If there are more than two users, including "thisUser", then it's a group chat
-        const isGroup = usernames.size > 2;
+        const header = document.querySelector('.ggj6brxn.gfz4du6o.r7fjleex.lhj4utae.le5p0ye3._11JPr.selectable-text.copyable-text');
+        let isGroup = false;
+        let members = [];
+
+        if (header) {
+            const innerText = header.innerText.toLowerCase();
+
+            if (innerText === 'you' || innerText.includes('click here for group info') || innerText.includes('click here for contact info')) {
+                isGroup = true;
+            } else {
+                try {
+                    members = innerText.split(', ');
+                    isGroup = true;
+                } catch (error) {
+                    isGroup = false;
+                }
+            }
+        }
 
         // Sending goal for this conversation (if any)
         const goal = getConversationData(otherUser, "goal");

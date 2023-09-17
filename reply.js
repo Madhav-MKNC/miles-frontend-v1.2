@@ -39,8 +39,6 @@ function fetchMessages(sentgoal) {
         : "";
     let thisUser = getUserName() ? getUserName() : "";
 
-    const usernames = new Set();
-
     const chats = Array.from(chatElements)
         .filter((element) => element.getAttribute("data-pre-plain-text")) // Filter out elements with no 'data-pre-plain-text' attribute
         .map((element) => {
@@ -50,7 +48,6 @@ function fetchMessages(sentgoal) {
             const usernameStartIndex = info.indexOf("] ") + 2;
             const usernameEndIndex = info.lastIndexOf(":");
             const username = info.slice(usernameStartIndex, usernameEndIndex);
-            usernames.add(username); // Add username to a set
 
             const messageElement = element.querySelector(".selectable-text");
             const messageText = messageElement ? messageElement.innerText : "";
@@ -86,7 +83,6 @@ function fetchMessages(sentgoal) {
             }
         }
     }
-
 
     // Sending goal for this conversation (if any)
     const goal = sentgoal;
