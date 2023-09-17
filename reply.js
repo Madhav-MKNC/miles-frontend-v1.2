@@ -68,7 +68,25 @@ function fetchMessages(sentgoal) {
         });
 
     // If there are more than two users, including "thisUser", then it's a group chat
-    const isGroup = usernames.size > 2;
+    const header = document.querySelector('.ggj6brxn.gfz4du6o.r7fjleex.lhj4utae.le5p0ye3._11JPr.selectable-text.copyable-text');
+    let isGroup = false;
+    let members = [];
+
+    if (header) {
+        const innerText = header.innerText.toLowerCase();
+
+        if (innerText === 'you' || innerText.includes('click here for group info') || innerText.includes('click here for contact info')) {
+            isGroup = true;
+        } else {
+            try {
+                members = innerText.split(', ');
+                isGroup = true;
+            } catch (error) {
+                isGroup = false;
+            }
+        }
+    }
+
 
     // Sending goal for this conversation (if any)
     const goal = sentgoal;
@@ -96,7 +114,8 @@ function fetchMessages(sentgoal) {
         goal: goal,
         chats: chats,
         userID: userID,
-        otherUserID: otherUserID
+        otherUserID: otherUserID,
+        groupMembers: members
     }
 }
 
