@@ -1,5 +1,7 @@
-/* ... */
+/* main */
 document.addEventListener('DOMContentLoaded', function () {
+
+  
   let dictString = localStorage.getItem("miles2");
   console.log(dictString);
 
@@ -59,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-  /* ... */
+  /* GOAL */
   document.getElementById('setgoal').addEventListener('click', function () {
     var goalInput = document.getElementById('myInput').value;
     console.log('e1');
@@ -78,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           chrome.tabs.sendMessage(tabs[0].id, { getScraped: true }, function (response) {
 
+            console.log('mknc');
             console.log(response);
             const thisUser = response.thisUser;
             const otherUserLabel = response.otherUserLabel;
