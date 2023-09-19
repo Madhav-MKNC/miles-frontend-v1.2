@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const otherUser = document.querySelector("._3W2ap")
       ? document.querySelector("._3W2ap").innerText
       : "";
-    sendResponse({ otherUserName: otherUser });
+    sendResponse({ otherUser: otherUser });
   }
 })
 
