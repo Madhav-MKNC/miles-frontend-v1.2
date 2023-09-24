@@ -107,8 +107,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* GENERATE REPLY */
   document.getElementById('backup').addEventListener('click', () => {
-    console.log("generate request sent")
-    let goal = ''
+    console.log("generate request sent");
+    let goal = '';
     if (dict.conversation_data[name]) { goal = dict.conversation_data[name][0] }
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chrome.tabs.sendMessage(tabs[0].id, { backup: true, goal: goal }, function (response) {
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         else {
           if (dict.conversation_data[name][3] === response.chats) {
-
+            // no updates in conversation
           }
           else {
             dict.conversation_data[name][1] = dict.conversation_data[name][3]
