@@ -128,6 +128,7 @@ function fetchMessages(sentgoal) {
 async function get_repy_from_server(data) {
     console.log("generating reply...");
 
+    // const response = await fetch("http://localhost:1234/get_reply", {
     const response = await fetch("https://miles.gamhcrew.repl.co/get_reply", {
         method: "POST",
         headers: {
