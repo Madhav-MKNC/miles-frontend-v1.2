@@ -112,14 +112,21 @@ document.addEventListener('click', function () {
         let members = [];
 
         if (header) {
-            const innerText = header.innerText.toLowerCase();
+            let innerText = header.innerText.toLowerCase();
 
-            if (innerText === 'you' || innerText.includes('click here for group info') || innerText.includes('click here for contact info')) {
+            if (innerText === 'you' || innerText.includes('click here for contact info') || innerText.includes('last seen')) {
+                isGroup = false;
+            }
+            else if (innerText.includes('click here for group info')) {
+                members = innerText.split(', ');
                 isGroup = true;
-            } else {
+            }
+            else {
                 try {
                     members = innerText.split(', ');
-                    isGroup = true;
+                    if (members.length > 1) {
+                        isGroup = true;
+                    }
                 } catch (error) {
                     isGroup = false;
                 }
@@ -141,7 +148,8 @@ document.addEventListener('click', function () {
             goal: string,
             chats: array,
             userID: string,
-            otherUserID: string
+            otherUserID: string,
+            groupMembers: array
         }
         */
 
@@ -153,7 +161,8 @@ document.addEventListener('click', function () {
             goal: goal,
             chats: chats,
             userID: userID,
-            otherUserID: otherUserID
+            otherUserID: otherUserID,
+            groupMembers: members
         })
         console.log("refresh status:", status);
 
